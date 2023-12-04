@@ -2,6 +2,7 @@ const textarea = document.querySelector("textarea"),
     voiceList = document.querySelector("select"),
     speechBtn = document.querySelector("button");
     speakingIndicator = document.createElement("div");
+    clearBtn = document.querySelector("#clear-text");
 
 let synth = speechSynthesis,
     isSpeaking = true;
@@ -76,4 +77,8 @@ voiceList.addEventListener('change', () => {
     if (textarea.value !== '') {
         textToSpeech(textarea.value);
     }
+});
+
+clearBtn.addEventListener("click", () => {
+    textarea.value = "";
 });

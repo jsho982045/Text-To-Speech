@@ -13,7 +13,7 @@ body{
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, #092abe 0%, #d35dc8 100%);
+    background: linear-gradient(135deg, #3056ff 0%, #d35dc8 100%);
 }
 
 ::selection{
@@ -135,4 +135,8 @@ form button:hover{
         max-width: 345px;
         width: 100%;
     }
+}
+
+.clearBtn {
+    background: #ff6363;
 }
