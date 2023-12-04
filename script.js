@@ -3,6 +3,7 @@ const textarea = document.querySelector("textarea"),
     speechBtn = document.querySelector("button");
     speakingIndicator = document.createElement("div");
     clearBtn = document.querySelector("#clear-text");
+    wordCountDisplay = document.querySelector("#word-count");
 
 let synth = speechSynthesis,
     isSpeaking = true;
@@ -43,6 +44,17 @@ function textToSpeech(text) {
 }
 
 
+textarea.addEventListener('input', updateWordCount);
+
+function updateWordCount() {
+    let text = textarea.value.trim();
+    let words = text.split(/\s+/).filter(function(n) { return n != '' });
+    wordCountDisplay.textContent = words.length + " word(s)";
+
+}
+updateWordCount();
+
+
 speakingIndicator.style.cssText = `
     text-align: center;
     color: white;
@@ -72,6 +84,8 @@ speechBtn.addEventListener("click", e => {
         }
     }
 });
+
+
 
 voiceList.addEventListener('change', () => {
     if (textarea.value !== '') {

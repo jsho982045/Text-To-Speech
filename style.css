@@ -71,7 +71,7 @@ form :where(textarea, select, button){
 
 form .row textarea{
     resize: none;
-    height: 110px;
+    height: 100px;
     font-size: 15px;
     padding: 8px 10px;
     border: 1px solid #999;
@@ -95,10 +95,12 @@ form .row select{
     font-size: 14px;
     background: none;
     color: #000;
+    cursor: pointer;
 }
 
 form .row select::-webkit-scrollbar{
     width: 8px;
+
 }
 
 form .row select::-webkit-scrollbar-track{
@@ -109,7 +111,9 @@ form .row select::-webkit-scrollbar-thumb{
     background-color: #888;
     border-radius: 8px;
     border-right: 2px solid #fff;
+    cursor: pointer;
 }
+
 
 form button{
     height: 55px;
@@ -139,4 +143,9 @@ form button:hover{
 
 .clearBtn {
     background: #ff6363;
+}
+
+.word-count {
+    font-size: 12px;
+    color: #681010;
 }
