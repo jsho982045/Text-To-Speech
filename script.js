@@ -1,13 +1,20 @@
 const textarea = document.querySelector("textarea"),
     voiceList = document.querySelector("select"),
     speechBtn = document.querySelector("button");
+    speakingIndicator = document.createElement("div");
 
 let synth = speechSynthesis,
     isSpeaking = true;
 
-voices();
+function populateVoices(){
+    if(synth.onvoiceschanged !== undefined){
+        synth.onvoiceschanged = voices;
+    }
+}
+
 
 function voices() {
+    voiceList.innerHTML = '';
     for (let voice of synth.getVoices()) {
         let selected = voice.name === "Google US English" ? "selected" : "";
         let option = `<option value="${voice.name}" ${selected}>${voice.name} (${voice.lang})</option>`;
@@ -15,7 +22,8 @@ function voices() {
     }
 }
 
-synth.addEventListener("voiceschanged", voices);
+populateVoices();
+
 
 function textToSpeech(text) {
     let utterance = new SpeechSynthesisUtterance(text);
@@ -24,35 +32,48 @@ function textToSpeech(text) {
             utterance.voice = voice;
         }
     }
+    utterance.onstart = function(){
+        speechBtn.textContent = "Speaking...";
+    };
+    utterance.onend = function(){
+        speechBtn.textContent = "Convert To Speech";
+    };
     synth.speak(utterance);
 }
+
+
+speakingIndicator.style.cssText = `
+    text-align: center;
+    color: white;
+    margin-top: 10px;
+`;
+
+document.body.appendChild(speakingIndicator);
 
 speechBtn.addEventListener("click", e => {
     e.preventDefault();
     if (textarea.value !== "") {
-        // Checks if not speaking, Speak Textarea Text
         if (!synth.speaking) {
             textToSpeech(textarea.value);
         }
-        // If text was long, Add Resume and Pause Function
+        // Resume/Pause functionality
         if (textarea.value.length > 80) {
-            setInterval(() => {
-                if (!synth.speaking && !isSpeaking) {
-                    isSpeaking = true;
-                    speechBtn.innerText = "Convert To Speech";
-                } else { }
-            }, 500);
-            if (isSpeaking) {
-                synth.resume();
-                isSpeaking = false;
-                speechBtn.innerText = "Pause Speech";
-            } else {
-                synth.pause();
-                isSpeaking = true;
-                speechBtn.innerText = "Resume Speech";
-            }
-        } else {
-            speechBtn.innerText = "Convert To Speech";
+            speechBtn.innerText = synth.paused ? "Resume Speech" : "Pause Speech";
+            speechBtn.onclick = () => {
+                if (synth.paused) {
+                    synth.resume();
+                    speechBtn.innerText = "Pause Speech";
+                } else {
+                    synth.pause();
+                    speechBtn.innerText = "Resume Speech";
+                }
+            };
         }
+    }
+});
+
+voiceList.addEventListener('change', () => {
+    if (textarea.value !== '') {
+        textToSpeech(textarea.value);
     }
 });
